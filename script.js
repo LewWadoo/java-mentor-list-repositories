@@ -6,7 +6,7 @@ chosens.addEventListener("click", function(event) {
     let target = event.target;
     if (!target.classList.contains("btn-close")) return;
 
-    target.parentElement.style.display = "none";
+    target.parentElement.remove();
 });
 
 inputContainer.addEventListener("click", function(event) {
