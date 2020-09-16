@@ -1,12 +1,12 @@
 const inputSearch = document.querySelector("input");
-const inputContainer = document.querySelector(".dropdown");
+const inputContainer = document.querySelector(".dropdown-container");
 const chosens = document.querySelector(".chosens");
 
 chosens.addEventListener("click", function(event) {
     let target = event.target;
     if (!target.classList.contains("btn-close")) return;
 
-    target.parentElement.style.display = "none";
+    target.parentElement.remove();
 });
 
 inputContainer.addEventListener("click", function(event) {
@@ -20,12 +20,7 @@ inputContainer.addEventListener("click", function(event) {
 });
 
 function removePredictions() {
-    let dropdownPredictions = document.querySelectorAll(".dropdown-content");
-    if (!dropdownPredictions) return;
-
-    for (let dropdownPrediction of dropdownPredictions) {
-	dropdownPrediction.remove();
-    }
+    inputContainer.innerHTML = "";
 }
 
 function showPredictions(repositories) {
@@ -33,22 +28,19 @@ function showPredictions(repositories) {
     removePredictions();
 
     for (let repositoryIndex = 0; repositoryIndex < 5; repositoryIndex++) {
-	let dropdownPrediction = document.createElement("div");
-	dropdownPrediction.classList.add("dropdown-content");
 	let name = repositories.items[repositoryIndex].name;
+	let owner = repositories.items[repositoryIndex].owner.login;
 	let starsCount = repositories.items[repositoryIndex].stargazers_count;
-	dropdownPrediction.textContent = name;
-	dropdownPrediction.setAttribute("data-name", name);
-	dropdownPrediction.setAttribute("data-owner", repositories.items[repositoryIndex].owner.login);
-	dropdownPrediction.setAttribute("data-stars", starsCount);
-	inputContainer.append(dropdownPrediction);
+
+	let dropdownContent = '<div class="dropdown-content" data-owner="' + owner + '" data-stars="' + starsCount + '">' + name + '</div>';
+	inputContainer.innerHTML += dropdownContent;
     }
 
 }
 
 function addChosen(target) {
     let chosen = document.createElement("div");
-    chosen.innerHTML = "Name: " + target.dataset.name + "<br>" + "Owner: " + target.dataset.owner + "<br>" + "Stars: " + target.dataset.stars;
+    chosen.innerHTML = "Name: " + target.textContent + "<br>" + "Owner: " + target.dataset.owner + "<br>" + "Stars: " + target.dataset.stars;
     chosen.classList.add("chosen");
     let button = document.createElement("button");
     button.classList.add("btn-close");
@@ -92,4 +84,4 @@ function debounce(fn, timeout) {
 }
 
 const getPredictionsDebounce = debounce(getPredictions, 500);
-inputSearch.addEventListener("keyup", getPredictionsDebounce);
+inputSearch.addEventListener("input", getPredictionsDebounce);
