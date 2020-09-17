@@ -30,22 +30,19 @@ function showPredictions(repositories) {
     for (let repositoryIndex = 0; repositoryIndex < 5; repositoryIndex++) {
 	let name = repositories.items[repositoryIndex].name;
 	let owner = repositories.items[repositoryIndex].owner.login;
-	let starsCount = repositories.items[repositoryIndex].stargazers_count;
+	let stars = repositories.items[repositoryIndex].stargazers_count;
 
-	let dropdownContent = '<div class="dropdown-content" data-owner="' + owner + '" data-stars="' + starsCount + '">' + name + '</div>';
+	let dropdownContent = `<div class="dropdown-content" data-owner="${owner}" data-stars="${stars}">${name}</div>`;
 	inputContainer.innerHTML += dropdownContent;
     }
-
 }
 
 function addChosen(target) {
-    let chosen = document.createElement("div");
-    chosen.innerHTML = "Name: " + target.textContent + "<br>" + "Owner: " + target.dataset.owner + "<br>" + "Stars: " + target.dataset.stars;
-    chosen.classList.add("chosen");
-    let button = document.createElement("button");
-    button.classList.add("btn-close");
-    chosen.append(button);
-    chosens.append(chosen);
+    let name = target.textContent;
+    let owner = target.dataset.owner;
+    let stars = target.dataset.stars;
+    
+    chosens.innerHTML += `<div class="chosen">Name: ${name}<br>Owner: ${owner}<br>Stars: ${stars}<button class="btn-close"></button></div>`;
 }
 
 async function getPredictions() {
